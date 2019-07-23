@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MAC {{region}} {{month}}</title>
+  <style type="text/css">
+    body {
+      font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      padding: 0px;
+      margin: 0px;
+    }
+
+    #header {
+      background-color: #9dad37;
+      padding-top: 20px;
+    }
+
+    #content {
+      padding-left: 5%;
+      padding-right: 5%;
+    }
+
+    #footer {
+      background-color: #9dad37;
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+
+  <!-- 1. Header -->
+  <tr><td align="center" id="header"></td></tr>
+
+  <!-- 2. Body -->
+  <tr><td id="content">
+
+  <!-- {{! This file is a template. If you can see this text something has gone wrong }} -->
+  <h1>{{region}} Region {{month}} Report</h1>
+
+  <p>Hi {{mac_name}},</p>
+
+  <p>Here is the Access Aware summary for the {{region}} Region for the month of {{month}}. There is a spreadsheet attached if you would like to take a closer look at the data.</p>
+
+  <h3>Amount</h3>
+  <p>There were <b>{{valid_reports}}</b> abuse reports made by app users this month. {{#change}}{{incr_decr}} {{amount}} reports from last month.{{/change}}{{^change}}The same amount of reports as last month.{{/change}}</p>
+
+  <h3>Locations</h3>
+  <p>Here is a map of their locations:</p>
+
+  <img src='../map/{{map_url}}'/>
+
+  <p>The most commonly reported addresses were:</p>
+  <ul>
+  {{#common_address_list}}
+    <li>{{count}} reports at {{_id}}</li>
+  {{/common_address_list}}
+  </ul>
+
+  <h3>Time</h3>
+  <p>This graph shows the number of reports made in {{month}} per day:</p>
+  <img src='../graph/{{day_graph_url}}'/>
+
+  <h3>Ownership</h3>
+  <p>{{public}} reports were in publicly owned parks, {{private}} were in privately owned parks, and in {{not_sure}} cases the reporters were not sure who owned the park.</p>
+
+  <p>Of the <i>privately</i> owned parks, the most common park owners were:</p>
+  <ul>
+  {{#common_owners_list}}
+    <li>{{name}} with {{count}} reports</li>
+  {{/common_owners_list}}
+  </ul>
+
+  {{#other_owners_count}}
+  <p>There were {{other_owners_count}} other private owners. {{#common_owners_list}}{{/common_owners_list}}</p>
+  {{/other_owners_count}}
+
+  <h3>Responses</h3>
+  <p>{{invalid}} reports were invalid{{#thanks_reps}}, {{thanks_reps}} have yet to be responded to,{{/thanks_reps}} and {{valid_reports}} were valid reports.</p>
+  
+  {{#all_notif}} 
+  <p>Parking services were notified about {{all_notif}} reports. {{^action}}But action wasn't taken for any of these notifications.{{/action}}{{#action}}An officer was dispatched for {{officer}} of these. Of these {{tick_issued}} tickets were issued, {{unforce}} were found to be unenforceable and {{veh_gone}} found the vehicle gone.{{/action}}</p>
+  {{/all_notif}}
+  {{^all_notif}}
+  <p>There were no notifications to parking services and thus no action was taken for any reports.</p>
+  {{/all_notif}}
+
+
+<!--   <h3>Report of Note</h3>
+  <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td align="center">
+    <img align="center" alt="Interesting Park" src='../sample.jpg'/>
+    <p>"I'll just be here for a minute" preventing someone from using a mobility park. Image from April 19th.</p>
+  </td></tr></table> -->
+  
+
+  <p>Regards,</p>
+  <p>Peter</p>
+
+  </td></tr>
+
+  
+  <!-- 3.Footer -->
+  <tr><td align="center" id="footer">
+    <img align="center" alt="Access Aware" src="https://gallery.mailchimp.com/58d927f470ef71463f6cf9c5b/images/6039211c-6443-4bdd-a9ff-ce1f16269da0.png">
+  </td></tr>
+  </table>
+</body>
+</html>

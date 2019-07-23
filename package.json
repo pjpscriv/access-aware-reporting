@@ -1,0 +1,37 @@
+{
+  "name": "Access Aware Reporting",
+  "description": "Creating data reports for the Access Aware app",
+  "homepage": "https://github.com/pjpscriv/access-aware-reporting",
+  "author": "Peter JP Scriven",
+  "version": "1.0.0",
+  "keywords": [],
+  "license": "MIT",
+  "main": "server.js",
+  "engines": {
+    "node": ">=6.9.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "request": "^2.88.0",
+    "sha1": "^1.1.1",
+    "express": "^4.16.3",
+    "mongodb": "^3.1.10",
+    "plotly": "^1.0.6",
+    "staticmaps": "^1.0.7",
+    "mustache": "^3.0.1",
+    "mustache-express": "^1.2.7"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pjpscriv/access-aware-reporting.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pjpscriv/access-aware-reporting/issues"
+  }
+}

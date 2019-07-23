@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-type" content="text/html">
+    <link rel="stylesheet"    type="text/css" href="/static/css/theme.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico"/>
+  </head>
+
+  <body>
+
+      <h1>Access Aware Dashboard</h1>
+      <h3>Peter {{test}}</h3>
+      
+      <div class="options">
+        <select>
+          <option disabled selected hidden>Region</option>
+          <option>Northern</option>
+          <option>Midlands</option>
+          <option>Central</option>
+          <option>Southern</option>
+        </select>
+        <select>
+          <option disabled selected hidden>Time Period</option>
+          <option>Day</option>
+          <option>Week</option>
+          <option>Month</option>
+          <option>Year</option>
+          <option>All Time</option>
+        </select>
+        <select>
+          <option disabled selected hidden>Channel</option>
+          <option>Abuses</option>
+          <option>Parks</option>
+          <option>Can't Find Park</option>
+          <option>Feedback</option>
+        </select>
+      </div>
+
+      <div>
+        <h3>Percentage of All</h3>
+        <div id="fraction_chart"></div>
+        <p></p>
+      </div>
+
+      <div>
+        <h3>Public / Private Abuse</h3>
+        <div id="public_private_chart"></div>
+        <p></p>
+      </div>
+
+      <div>
+        <h3>Abuse Report States</h3>
+        <div id="state_chart"></div>
+        <p></p>
+      </div>
+
+      <div>
+        <h3>Regions Area</h3>
+        <div id="areas_chart"></div>
+        <p></p>
+      </div>
+
+  </body>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script type="text/javascript" src="/static/js/abuses.js"></script>
+</html>

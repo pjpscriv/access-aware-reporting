@@ -1,0 +1,45 @@
+html {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+}
+
+body {
+    flex: 0 1 540px;
+    min-width: 0;
+}
+
+h1 {
+    text-align: center;
+}
+
+div h3 {
+    text-align: left;
+    /* background-color: lightgreen; */
+    border-bottom: 2px solid #666;
+}
+
+.options {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+}
+
+option {
+    color: #000;
+}
+
+select {
+    color: #aaa;
+    background-color: white;
+    border-width: 0px;
+    border-bottom: 2px solid #666;
+    font-size: 20px;
+    flex: 0 1 150px;
+}
+
+/* For tooltip flickering */
+svg > g > g:last-child { 
+    pointer-events: none 
+}
+

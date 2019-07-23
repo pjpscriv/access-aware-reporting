@@ -1,0 +1,23 @@
+# API Key
+api-key.txt
+
+# Production Details i.e. anything not needed to run locally
+web.config
+process.json
+
+# Generated Files
+generated/
+
+# Local DB Files
+mongo/
+mongodb.conf
+
+# Node Dependencies
+node_modules/
+
+# VS Code config
+.vscode
+
+# Other
+*.zip
+*.log
