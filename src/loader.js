@@ -10,7 +10,7 @@
 // IMPORTS
 const assert = require('assert');
 const MongoClient = require('mongodb').MongoClient;
-const DataPuller  = require('./puller.js');
+const DataPuller = require('./puller.js');
 const Helper = require('./helper.js');
 
 // CONSTANTS
@@ -27,9 +27,10 @@ const PULLALL = false;
 const RECURSIVEPULL = true;
 
 // FUNCTIONS
-// Main: Pull Data into database
+/**
+ * Main: Pull Data into database
+ */
 function main() {
-
   client.connect(function(err) {
     assert.equal(null, err);
 
@@ -37,11 +38,12 @@ function main() {
     const collection = db.collection(help.COLNAME);
 
     // Check if collection exists
-    db.listCollections({}).toArray(deleteCollection)
-    
+    db.listCollections({}).toArray(deleteCollection);
+
     // Delete existing Collection
+    /** */
     function deleteCollection(err, cols) {
-      assert.equal(null, err)
+      assert.equal(null, err);
       for (let i in cols) {
         var name = cols[i].name;
         if (name === help.COLNAME) {
@@ -50,7 +52,7 @@ function main() {
         }
       }
     }
-    
+
     // Pull new data
     if (PULLALL) {
       if (RECURSIVEPULL) {
@@ -97,7 +99,9 @@ function main() {
   });
 }
 
-// Helper
+/**
+ * Helper
+ */
 function listAll() {
   collection.find({}).toArray(function(err, docs) {
     assert.equal(err,null);
@@ -107,7 +111,9 @@ function listAll() {
   });
 }
 
-// Tester
+/**
+ * Tester
+ */
 function test() {
   console.log("Running test...");
   puller.getReportsBlock(help.ABUSE_CHANNEL, 0, 20, (reports) => {
@@ -117,4 +123,4 @@ function test() {
 }
 
 // test();
-main();
+module.exports.init = main;

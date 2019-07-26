@@ -1,66 +1,63 @@
+#!/usr/bin/env node
 /**
- * Just do everything.
+ * Generate regional monthly report emails.
+ *
+ * Author: Peter JP Scriven
+ * Started: 26 Jul 2019
  */
-// IMPORTS
-const filter   = require('filter.js');
-const analyser = require('analyser.js');
-const mapper   = require('mapper.js');
-const grapher  = require('grapher.js');
-const renderer = require('renderer.js');
 
-const fs = require('fs');
+// IMPORTS
+// Global
 const assert = require('assert');
 const MongoClient = require('mongodb').MongoClient;
+// Local
+const filter = require('./generators/filter.js');
+const analyser = require('./generators/analyser.js');
+const mapper = require('./generators/mapper.js');
+const grapher = require('./generators/grapher.js');
+// const renderer = require('./generators/renderer.js');
+const Helper = require('./helper.js');
 
 // CONSTANTS
-// Database
-const URL = 'mongodb://localhost:27017';
-const DBNAME = 'accessaware';
-const COLNAME = 'abuses3';
-// Output
-const OUTPUT_DIR = process.cwd();
+const help = new Helper();
+const client = new MongoClient(help.URL, {useNewUrlParser: true});
 
-
+/**
+ * Main function.
+ */
 function main() {
+  const currYear = new Date().getFullYear();
+  const currMonth = new Date().getMonth() + 1;
+  const startYear = 2019;
+  const startMonth = 2;
+
+  // Loader here ?
+
+  // First round
   client.connect(function(err) {
     assert.equal(null, err);
-    
-    const db = client.db(DBNAME);
-    const col = db.collection(COLNAME);
-    
-    var year = 2019; // 2017;
-    var month = 2; // 3;
-    
-    var currYear = new Date().getFullYear();
-    var currMonth = new Date().getMonth() + 1;
-    
+    let year = startYear; // 2017;
+    let month = startMonth; // 3;
+
     // Iterate Months
     while ((year < currYear) || (year === currYear && month <= currMonth)) {
-
-      var dir = makeDir(year, month);
-      
-      // Iterate Regions
-      for (let region of Object.keys(regions)) {
-      
-        // Filter
-
-
-        // Analyser
-
-
-        // Mapper
-
-
-        // Grapher
-
-
-        // Renderer
-
-
+      // Filter
+      filter(client, help, month, year);
+      // Analyser + Renderer
+      analyser(client, help, month, year);
+      // Mapper
+      mapper(client, help, month, year);
+      // Grapher
+      grapher(client, month, year);
+      // Next Month
+      if (month < 12) {
+        month++;
+      } else {
+        month = 1; year++;
       }
     }
-  client.close();
+    client.close();
   });
 }
 
-main()
+module.exports.init = main();

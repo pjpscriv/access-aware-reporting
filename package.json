@@ -1,5 +1,5 @@
 {
-  "name": "Access Aware Reporting",
+  "name": "access-aware-reporting",
   "description": "Creating data reports for the Access Aware app",
   "homepage": "https://github.com/pjpscriv/access-aware-reporting",
   "author": "Peter JP Scriven",
@@ -25,6 +25,8 @@
     "mustache-express": "^1.2.7"
   },
   "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-google": "^0.13.0",
     "mocha": "^5.2.0"
   },
   "repository": {
