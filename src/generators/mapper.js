@@ -126,25 +126,19 @@ function drawPointMap(points, region, file, icon) {
 
 
 /**
- * Main: Month / Region Iterator
+ * Main: Queries Database. Draws map.
+ * TODO: Filter by Public / Private for parking providers.
  *
- * @param {*} client
+ * @param {*} collection
  * @param {*} help
- * @param {*} month
- * @param {*} year
+ * @param {*} date
+ * @param {*} dir
+ * @param {*} areaName
+ * @param {*} area
  */
-function main(client, help, month, year) {
-  const dir = help.makeDir(year, month);
-  const collection = client.db(help.DBNAME).collection(help.COLNAME);
-
-  // Iterate Regions
-  for (const regionName of Object.keys(help.regions)) {
-    const date = help.monthRegEx(year, month);
-    const region = help.regions[regionName];
-    const file = path.join(dir, 'map', regionName+'_map.png');
-    getValidReports(collection, date, file, region,
-        help.ICON_FILE, drawPointMap);
-  }
+function main(collection, help, date, dir, areaName, area) {
+  const file = path.join(dir, 'map', areaName+'_map.png');
+  getValidReports(collection, date, file, area, help.ICON_FILE, drawPointMap);
 }
 
 module.exports = main;

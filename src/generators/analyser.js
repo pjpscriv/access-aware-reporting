@@ -46,6 +46,7 @@ function getValidReports(collection, date, region, callback) {
 
   collection.find(query).toArray((err, dat) => {
     assert.equal(err, null);
+    // console.log(date, 'Valids:', dat.length);
     callback('valid_reports', dat.length);
   });
 }
@@ -360,20 +361,20 @@ function getStates(collection, date, region, callback) {
  * Callback Wrapper
  *
  * @param {*} file
- * @param {*} callback Takes result file and renders HTML Email
+ * @param {*} renderHtml Takes result file and renders HTML Email
  * @return {*}
  */
-function saveAnalysisFile(file, callback) {
+function saveAnalysisFile(file, renderHtml) {
   return (res) => {
-    // Postprocessing. Dirty? Yes. But functional.
-    // TODO: make better
+    // Postprocessing. Dirty? Yes. But functional. TODO: make better
     res.action = res.officer + res.tick_issued + res.unforce + res.veh_gone;
     res.all_notif = res.park_notif + res.action;
 
     fs.writeFile(file, JSON.stringify(res, null, 2), null, (err) => {
       assert.equal(err, null);
       console.log(file);
-      callback(file);
+      // Render HTML
+      renderHtml(file);
     });
   };
 }
@@ -386,36 +387,42 @@ function saveAnalysisFile(file, callback) {
  * @param {*} help
  * @param {*} year
  * @param {*} month
- * @param {*} regionName
+ * @param {*} area
+ * @param {*} isRegion
  * @param {*} callback
  */
-function analyse(collection, help, year, month, regionName, callback) {
-  // RESULT OBJECT
+function analyse(collection, help, year, month, area, isRegion, callback) {
+  // Return result when it has this many keys
+  let NUMBER_OF_DATA_POINTS = 22;
+
+  // ~~~ RESULT OBJECT ~~~
   const res = {
     // Main Info
-    region: regionName[0].toUpperCase() + regionName.slice(1),
+    region: help.prettyAreaName(area),
     month: help.monthsLong[month-1],
     year: year,
-    // Names
-    gm_name: help.GMs[regionName].first,
-    mac_names: help.MACs[regionName].firsts,
     // Files
-    map_url: regionName+'_map.png',
-    day_graph_url: regionName+'_graph.png',
+    map_url: area+'_map.png',
+    day_graph_url: area+'_graph.png',
     // Interesting Mustache Action
     action: function() {
       return function(text, render) {
         return 'THIS IS TEST' + render(text);
       };
     },
+    is_ccs: isRegion,
     // function for getting monthly change S U R E L Y
     // test: function() {
     //   return function
     // },
   };
 
-  // When result has this many keys, return it.
-  const NUMBER_OF_DATA_POINTS = 23;
+  // CCS Settings
+  if (isRegion) {
+    res.gm_name = help.GMs[area].first;
+    res.mac_names = help.MACs[area].firsts;
+    NUMBER_OF_DATA_POINTS += 2;
+  }
 
   /**
    * Save values to results object. Return it when it gets big enough.
@@ -431,7 +438,7 @@ function analyse(collection, help, year, month, regionName, callback) {
 
   const date = help.monthRegEx(year, month);
   const lastmonth = help.lastMonthRegEx(year, month);
-  const region = help.regions[regionName];
+  const region = help.getPolygon(area);
 
   getValidReports(collection, date, region, saveToRes);
   getChange(collection, lastmonth, region, monthChanges);
@@ -463,22 +470,20 @@ function analyse(collection, help, year, month, regionName, callback) {
 /**
  * Main: Pull data from database. Filter by (month, region)
  *
- * @param {MongoClient} client
+ * @param {*} collection
  * @param {Helper} help
  * @param {number} month The month
  * @param {number} year
+ * @param {string} area Name
+ * @param {boolean} isRegion
  */
-function main(client, help, month, year) {
-  const collection = client.db(help.DBNAME).collection(help.COLNAME);
-  const dir = help.makeDir(year, month);
-  const regionNames = Object.keys(help.regions);
-  // Iterate Regions
-  for (const region of regionNames) {
-    const file = path.join(dir, 'json', region+'.json');
-    const render = renderer(month, year, region, help);
-    analyse(collection, help, year, month, region,
-        saveAnalysisFile(file, render));
-  }
+function main(collection, help, month, year, area, isRegion) {
+  const dir = help.makeDir(year, month, isRegion);
+
+  const file = path.join(dir, 'json', area+'.json');
+  const render = renderer(dir, area, isRegion);
+  analyse(collection, help, year, month, area, isRegion,
+      saveAnalysisFile(file, render));
 }
 
 

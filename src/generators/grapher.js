@@ -142,19 +142,16 @@ function drawGraph(collection, month, year, region, outFile) {
 /**
  * Yo.
  *
- * @param {*} client
+ * @param {*} collection
  * @param {*} month
  * @param {*} year
+ * @param {*} dir
+ * @param {*} areaName
+ * @param {*} area
  */
-function main(client, month, year) {
-  const dir = help.makeDir(year, month);
-  const collection = client.db(help.DBNAME).collection(help.COLNAME);
-  // Iterate Regions
-  for (const regionName of Object.keys(help.regions)) {
-    const region = help.regions[regionName];
-    const file = path.join(dir, 'graph', regionName+'_graph.png');
-    drawGraph(collection, month, year, region, file);
-  }
+function main(collection, month, year, dir, areaName, area) {
+  const file = path.join(dir, 'graph', areaName+'_graph.png');
+  drawGraph(collection, month, year, area, file);
 }
 
 module.exports = main;

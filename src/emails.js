@@ -39,16 +39,41 @@ function main() {
     let year = startYear; // 2017;
     let month = startMonth; // 3;
 
+    const collection = client.db(help.DBNAME).collection(help.COLNAME);
+
     // Iterate Months
     while ((year < currYear) || (year === currYear && month <= currMonth)) {
-      // Filter
-      filter(client, help, month, year);
-      // Analyser + Renderer
-      analyser(client, help, month, year);
-      // Mapper
-      mapper(client, help, month, year);
-      // Grapher
-      grapher(client, month, year);
+      const date = help.monthRegEx(year, month);
+      // 1 - Iterate CCS Regions
+      console.log(' --- CCS REGIONS', month, year, '---');
+      for (const regionName of Object.keys(help.regions)) {
+        // Get Dir
+        const dir = help.makeDir(year, month, true);
+        const region = help.regions[regionName];
+        // Filter
+        filter(collection, dir, date, regionName, region);
+        // Analyser + Renderer
+        analyser(collection, help, month, year, regionName, true);
+        // Mapper
+        mapper(collection, help, date, dir, regionName, region);
+        // Grapher
+        grapher(collection, month, year, dir, regionName, region);
+      }
+      // 2 - Iterate Parking Providers
+      console.log(' --- PARKING PROVIDER (AREAS)', month, year, '---');
+      for (const areaName of Object.keys(help.providers)) {
+        // Get Dir
+        const dir = help.makeDir(year, month, false);
+        const area = help.providers[areaName];
+        // Filter
+        filter(collection, dir, date, areaName, area);
+        // Analyser + Renderer
+        analyser(collection, help, month, year, areaName, false);
+        // Mapper
+        mapper(collection, help, date, dir, areaName, area);
+        // Grapher
+        grapher(collection, month, year, dir, areaName, area);
+      }
       // Next Month
       if (month < 12) {
         month++;

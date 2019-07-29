@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>MAC {{region}} {{month}}</title>
+  <title>{{region}} {{month}} {{year}}</title>
   <style type="text/css">
     body {
       font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -38,9 +38,14 @@
   <!-- {{! This file is a template. If you can see this text something has gone wrong }} -->
   <h1>{{region}} Region {{month}} Report</h1>
 
-  <p>Hi {{mac_name}},</p>
+  {{#is_ccs}}
+  <p>Hi {{name}},</p>
+  {{/is_ccs}}
+  {{^is_ccs}}
+  <p>Hello,</p>
+  {{/is_ccs}}
 
-  <p>Here is the Access Aware summary for the {{region}} Region for the month of {{month}}. There is a spreadsheet attached if you would like to take a closer look at the data.</p>
+  <p>Here is the Access Aware summary for the {{region}} Region for the month of {{month}}.{{#mac}} There is a spreadsheet attached if you would like to take a closer look at the data.{{/mac}}</p>
 
   <h3>Amount</h3>
   <p>There were <b>{{valid_reports}}</b> abuse reports made by app users this month. {{#change}}{{incr_decr}} {{amount}} reports from last month.{{/change}}{{^change}}The same amount of reports as last month.{{/change}}</p>

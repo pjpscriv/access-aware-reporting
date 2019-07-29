@@ -16,16 +16,13 @@ const assert = require('assert');
 /**
  * Callback function wrapper
  *
- * @param {int} year
- * @param {int} month
+ * @param {object} dir
  * @param {object} region
- * @param {object} help Help object
  * @return {function} callback
  */
-function saveCSVCallback(year, month, region, help) {
+function saveCSVCallback(dir, region) {
   return function(err, data) {
     assert.equal(err, null);
-    const dir = help.makeDir(year, month);
     saveCSV(path.join(dir, 'csv', region+'.csv'), data); // Write file
   };
 }
@@ -180,32 +177,27 @@ function saveCSV(file, data) {
 /**
  * Pull the data from the database filtered by month and ccs region
  *
- * @param {MongoClient} client
- * @param {Helper} help
- * @param {number} month The month
- * @param {number} year
+ * @param {*} collection
+ * @param {*} dir
+ * @param {RegExp} date The month
+ * @param {string} regionName
+ * @param {string} region
  */
-function main(client, help, month, year) {
-  const collection = client.db(help.DBNAME).collection(help.COLNAME);
-  // Iterate Regions
-  for (const region of Object.keys(help.regions)) {
-    const query = {
-      'location': {
-        '$geoWithin': {
-          '$polygon': help.regions[region],
-        },
+function main(collection, dir, date, regionName, region) {
+  const query = {
+    'location': {
+      '$geoWithin': {
+        '$polygon': region,
       },
-      'form_fields': {
-        '$elemMatch': {
-          'value': help.monthRegEx(year, month),
-        },
+    },
+    'form_fields': {
+      '$elemMatch': {
+        'value': date,
       },
-    };
+    },
+  };
 
-    collection.find(query).toArray(saveCSVCallback(year, month, region, help));
-  }
-  // client.close();
-  // });
+  collection.find(query).toArray(saveCSVCallback(dir, regionName));
 }
 
 module.exports = main;
