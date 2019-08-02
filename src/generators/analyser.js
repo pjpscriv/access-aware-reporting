@@ -472,14 +472,13 @@ function analyse(collection, help, year, month, area, isRegion, callback) {
  *
  * @param {*} collection
  * @param {Helper} help
+ * @param {*} dir
  * @param {number} month The month
  * @param {number} year
  * @param {string} area Name
  * @param {boolean} isRegion
  */
-function main(collection, help, month, year, area, isRegion) {
-  const dir = help.makeDir(year, month, isRegion);
-
+function main(collection, help, dir, month, year, area, isRegion) {
   const file = path.join(dir, 'json', area+'.json');
   const render = renderer(dir, area, isRegion);
   analyse(collection, help, year, month, area, isRegion,

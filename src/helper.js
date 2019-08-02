@@ -218,6 +218,17 @@ function Helper() {
       [-39.063448587207205, 173.99974822998047],
     ]};
 
+  // Other Areas
+  this.areas = {
+    northlands: [
+      [-36.58465761247167, 173.82568359375],
+      [-35.88905007936092, 175.0616455078125],
+      [-33.82479361826488, 173.463134765625],
+      [-34.56538299699511, 171.85363769531247],
+      [-36.58465761247167, 173.82568359375],
+    ],
+  };
+
   // Names
   this.GMs = {
     northern: {full: 'Tina Syme', first: 'Tina'},
@@ -288,14 +299,9 @@ Helper.prototype.mkDirPath = function(dirPath) {
   }
 };
 
-Helper.prototype.makeDir = function(year, month, isRegion) {
+Helper.prototype.makeDir = function(year, month, parentDir) {
   // CCS Region or Provider Area
-  let areaDir = this.OUTPUT_DIR;
-  if (isRegion) {
-    areaDir = path.join(this.OUTPUT_DIR, 'ccs');
-  } else {
-    areaDir = path.join(this.OUTPUT_DIR, 'providers');
-  }
+  const areaDir = path.join(this.OUTPUT_DIR, parentDir);
 
   const monthNum = (month<10 ? '0'+month : month);
   const monthStr = monthNum + ' - ' + this.months[month-1];
@@ -319,10 +325,13 @@ Helper.prototype.prettyAreaName = function(area) {
 Helper.prototype.getPolygon = function(areaName) {
   const region = this.regions[areaName];
   const provider = this.providers[areaName];
+  const area = this.areas[areaName];
   if (region !== undefined) {
     return region;
   } else if (provider !== undefined) {
     return provider;
+  } else if (area !== undefined) {
+    return area;
   } else {
     throw Error('Invalid area name. No corresponding polygon exists.');
   }

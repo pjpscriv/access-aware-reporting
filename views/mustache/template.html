@@ -27,10 +27,10 @@
   </style>
 </head>
 <body>
-  <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+  <table cellpadding="0" cellspacing="0" height="100%" width="100%" text-align="center" border-width="4">
 
   <!-- 1. Header -->
-  <tr><td align="center" id="header"></td></tr>
+  <tr><td text-align="center" id="header"></td></tr>
 
   <!-- 2. Body -->
   <tr><td id="content">
@@ -42,7 +42,7 @@
   <p>Hi {{name}},</p>
   {{/is_ccs}}
   {{^is_ccs}}
-  <p>Hello,</p>
+  <p>Hi,</p>
   {{/is_ccs}}
 
   <p>Here is the Access Aware summary for the {{region}} Region for the month of {{month}}.{{#mac}} There is a spreadsheet attached if you would like to take a closer look at the data.{{/mac}}</p>

@@ -60,7 +60,7 @@ function saveCSV(file, data) {
         writeData += report.id + ',';
         writeData += report.location.latitude + ',';
         writeData += report.location.longitude + ',';
-        writeData += '\''+report.address+'\'' + ',';
+        writeData += '\"'+report.address+'\"' + ',';
         writeData += report.report_state_name + ','; // or .report_state_id
 
         // Field Value Variables
@@ -105,13 +105,13 @@ function saveCSV(file, data) {
               }
               break;
             case 24536:
-              other = (field.value ? '\''+field.value+'\'' : '');
+              other = (field.value ? '\"'+field.value+'\"' : '');
               break;
             case 24534:
-              permitNumber = (field.value ? '\''+field.value+'\'' : '');
+              permitNumber = (field.value ? '\"'+field.value+'\"' : '');
               break;
             case 24500:
-              numberPlate = (field.value ? '\''+field.value.toUpperCase()+'\''
+              numberPlate = (field.value ? '\"'+field.value.toUpperCase()+'\"'
                : '');
               break;
             case 37191:
@@ -131,10 +131,10 @@ function saveCSV(file, data) {
               }
               break;
             case 55424:
-              parkOwner = (field.value ? '\''+field.value+'\'' : '');
+              parkOwner = (field.value ? '\"'+field.value+'\"' : '');
               break;
             case 41744:
-              additionalDetails = (field.value ? '\''+field.value+'\'' : '');
+              additionalDetails = (field.value ? '\"'+field.value+'\"' : '');
               break;
             // Follow up, Office use, Section, Textbox, Textbox
             case 65244: case 65245: case 63982: case 24499: case 24491:
@@ -153,7 +153,7 @@ function saveCSV(file, data) {
 
         // Collate Values
         writeData += datetimeOfMisuse + ', ';
-        writeData += (photoUrls.length ? '\''+photoUrls+ '\'' : '') + ', ';
+        writeData += (photoUrls.length ? '\"'+photoUrls+ '\"' : '') + ', ';
         writeData += abuseType + ', ';
         writeData += other + ', ';
         writeData += permitNumber + ', ';
