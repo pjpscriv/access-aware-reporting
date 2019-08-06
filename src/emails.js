@@ -51,7 +51,7 @@ function main() {
   const currYear = new Date().getFullYear();
   const currMonth = new Date().getMonth() + 1;
   const startYear = 2019;
-  const startMonth = 6;
+  const startMonth = 7;
 
   // Loader here ?
 
@@ -72,10 +72,10 @@ function main() {
         makeRegionMonth(collection, regionName, month, year, dir, true);
       }
 
-      // 2 - Iterate Parking Proareaviders
-      dir = help.makeDir(year, mareaonth, 'providers');
-      console.log(' --- PARKING areaPROVIDER (AREAS)', month, year, '---');
-      for (const areaName of Objareaect.keys(help.providers)) {
+      // 2 - Iterate Parking Providers
+      dir = help.makeDir(year, month, 'providers');
+      console.log(' --- PARKING PROVIDER (AREAS)', month, year, '---');
+      for (const areaName of Object.keys(help.providers)) {
         makeRegionMonth(collection, areaName, month, year, dir, false);
       }
 

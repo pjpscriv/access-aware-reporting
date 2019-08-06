@@ -21,7 +21,7 @@ function Helper() {
   // MongoDB Constants
   this.URL = 'mongodb://localhost:27017';
   this.DBNAME = 'accessaware';
-  this.COLNAME = 'jul05allabuses';
+  this.COLNAME = 'aug06allabuses';
 
   // Output directory
   this.OUTPUT_DIR = path.join(process.cwd(), '..', 'generated');
@@ -249,10 +249,10 @@ function Helper() {
 // Key
 Helper.prototype.getKey = function() {
   try {
-    return fs.readFileSync('../res/api-key.txt').toString();
+    return fs.readFileSync('../api-key.txt').toString();
   } catch (err1) {
     try {
-      return fs.readFileSync('./res/api-key.txt').toString();
+      return fs.readFileSync('./api-key.txt').toString();
     } catch (err2) {
       console.log(err1.message);
       console.log(err2.message);

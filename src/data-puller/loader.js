@@ -1,7 +1,7 @@
 /**
  * Mongo Data Loader. Pulls data from SaferMe API
  * and loads it into local MongoDB database.
- * 
+ *
  * Author: Peter JP Scriven
  * Started: 13 Feb 2019
  * Updated: 14 Apr 2019
@@ -11,11 +11,11 @@
 const assert = require('assert');
 const MongoClient = require('mongodb').MongoClient;
 const DataPuller = require('./puller.js');
-const Helper = require('./helper.js');
+const Helper = require('../helper.js');
 
 // CONSTANTS
 const help = new Helper();
-const client = new MongoClient(help.URL, { useNewUrlParser: true });
+const client = new MongoClient(help.URL, {useNewUrlParser: true});
 const puller = new DataPuller(help.getKey());
 
 // true = pulls *whole* channel
@@ -40,15 +40,20 @@ function main() {
     // Check if collection exists
     db.listCollections({}).toArray(deleteCollection);
 
-    // Delete existing Collection
-    /** */
+    /**
+     * Delete existing Collection
+     * @param {*} err
+     * @param {*} cols
+     */
     function deleteCollection(err, cols) {
       assert.equal(null, err);
-      for (let i in cols) {
-        var name = cols[i].name;
-        if (name === help.COLNAME) {
-          console.log(name, 'DELETED');
-          collection.drop();
+      for (const i in cols) {
+        if ({}.hasOwnProperty.call(cols, i)) {
+          const name = cols[i].name;
+          if (name === help.COLNAME) {
+            console.log(name, 'DELETED');
+            collection.drop();
+          }
         }
       }
     }
@@ -68,59 +73,74 @@ function main() {
       }
     }
 
-    // Populate
+    /**
+     * Populate
+     * @param {*} reports
+     */
     function loadToDatabase(reports) {
       collection.insertMany(reports, insertSuccess);
     }
 
-    // Double check insertion successful
+
+    /**
+     * Double check insertion successful
+     * @param {*} err
+     */
     function insertSuccess(err) {
-      assert.equal(err,null);
-      console.log("...\nSuccessfully inserted!");
+      assert.equal(err, null);
+      console.log('...\nSuccessfully inserted!');
       client.close();
     }
 
-    // Print one result
-    function logOneReport(err, docs) {
-      assert.equal(err,null);
-      console.log("Found the following records:");
-      console.log("id:", docs.id)
-    }
+    /**
+     * Print one result
+     * @param {*} err
+     * @param {*} docs
+     */
+    // function logOneReport(err, docs) {
+    //   assert.equal(err, null);
+    //   console.log('Found the following records:');
+    //   console.log('id:', docs.id);
+    // }
 
-    // Print all results
-    function logReportList(err, docs) {
-      assert.equal(err,null);
-      console.log("Found the following records:");
-      for (var i=0; i<docs.length; i++) {
-        var doc = docs[i];
-        console.log("id:", doc.id)
-      }
-    }
+    /**
+     * Print all results
+     * @param {*} err
+     * @param {*} docs
+     */
+    // function logReportList(err, docs) {
+    //   assert.equal(err, null);
+    //   console.log('Found the following records:');
+    //   for (let i=0; i<docs.length; i++) {
+    //     const doc = docs[i];
+    //     console.log('id:', doc.id);
+    //   }
+    // }
   });
 }
 
 /**
  * Helper
  */
-function listAll() {
-  collection.find({}).toArray(function(err, docs) {
-    assert.equal(err,null);
-    console.log("Found the following records:");
-    console.log(docs)
-    client.close();
-  });
-}
+// function listAll() {
+//   collection.find({}).toArray(function(err, docs) {
+//     assert.equal(err, null);
+//     console.log('Found the following records:');
+//     console.log(docs);
+//     client.close();
+//   });
+// }
 
 /**
  * Tester
  */
-function test() {
-  console.log("Running test...");
-  puller.getReportsBlock(help.ABUSE_CHANNEL, 0, 20, (reports) => {
-    console.log("...\nReports recived:", reports.length);
-    console.log("First report id:", reports[0].id);
-  })
-}
+// function test() {
+//   console.log('Running test...');
+//   puller.getReportsBlock(help.ABUSE_CHANNEL, 0, 20, (reports) => {
+//     console.log('...\nReports recived:', reports.length);
+//     console.log('First report id:', reports[0].id);
+//   });
+// }
 
 // test();
-module.exports.init = main;
+module.exports.init = main();
