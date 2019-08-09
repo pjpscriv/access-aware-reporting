@@ -274,6 +274,10 @@ Helper.prototype.monthRegEx = function(year, month) {
   return new RegExp(text);
 };
 
+Helper.prototype.yearRegEx = function(year) {
+  return new RegExp('^' + year + '-');
+};
+
 Helper.prototype.lastMonthRegEx = function(year, month) {
   assert.equal(true, (0 < month) && (month < 13));
   if (month === 1) {

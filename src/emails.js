@@ -15,12 +15,16 @@ const filter = require('./generators/filter.js');
 const analyser = require('./generators/analyser.js');
 const mapper = require('./generators/mapper.js');
 const grapher = require('./generators/grapher.js');
-// const renderer = require('./generators/renderer.js');
 const Helper = require('./helper.js');
 
-// CONSTANTS
-const help = new Helper();
-const client = new MongoClient(help.URL, {useNewUrlParser: true});
+/**
+ * CONSTRUCTOR
+ */
+function EmailMaker() {
+  this.help = new Helper();
+  this.client = new MongoClient(this.help.URL, {useNewUrlParser: true});
+}
+
 
 /**
  *
@@ -31,52 +35,53 @@ const client = new MongoClient(help.URL, {useNewUrlParser: true});
  * @param {*} dir
  * @param {*} isRegion
  */
-function makeRegionMonth(collection, regionName, month, year, dir, isRegion) {
-  const region = help.getPolygon(regionName);
-  const date = help.monthRegEx(year, month);
+EmailMaker.prototype.makeRegionMonth =function(
+    collection, regionName, month, year, dir, isRegion) {
+  const region = this.help.getPolygon(regionName);
+  const date = this.help.monthRegEx(year, month);
   // Filter
   filter(collection, dir, date, regionName, region);
   // Analyser + Renderer
-  analyser(collection, help, dir, month, year, regionName, isRegion);
+  analyser(collection, this.help, dir, month, year, regionName, isRegion);
   // Mapper
-  mapper(collection, help, date, dir, regionName, region);
+  mapper(collection, this.help, date, dir, regionName, region);
   // Grapher
   grapher(collection, month, year, dir, regionName, region);
-}
+};
 
 /**
  * Main function.
  */
-function main() {
+EmailMaker.prototype.main = function() {
   const currYear = new Date().getFullYear();
   const currMonth = new Date().getMonth() + 1;
   const startYear = 2019;
   const startMonth = 7;
 
-  // Loader here ?
+  const that = this;
 
-  // First round
-  client.connect(function(err) {
+  this.client.connect(function(err) {
     assert.equal(null, err);
     let year = startYear; // 2017;
     let month = startMonth; // 3;
 
-    const collection = client.db(help.DBNAME).collection(help.COLNAME);
+    const collection = that.client.db(that.help.DBNAME)
+        .collection(that.help.COLNAME);
 
     // Iterate Months
     while ((year < currYear) || (year === currYear && month <= currMonth)) {
       // 1 - Iterate CCS Regions
-      let dir = help.makeDir(year, month, 'ccs');
+      let dir = that.help.makeDir(year, month, 'ccs');
       console.log(' --- CCS REGIONS', month, year, '---');
-      for (const regionName of Object.keys(help.regions)) {
-        makeRegionMonth(collection, regionName, month, year, dir, true);
+      for (const regionName of Object.keys(that.help.regions)) {
+        that.makeRegionMonth(collection, regionName, month, year, dir, true);
       }
 
       // 2 - Iterate Parking Providers
-      dir = help.makeDir(year, month, 'providers');
+      dir = that.help.makeDir(year, month, 'providers');
       console.log(' --- PARKING PROVIDER (AREAS)', month, year, '---');
-      for (const areaName of Object.keys(help.providers)) {
-        makeRegionMonth(collection, areaName, month, year, dir, false);
+      for (const areaName of Object.keys(that.help.providers)) {
+        that.makeRegionMonth(collection, areaName, month, year, dir, false);
       }
 
       // Next Month
@@ -86,33 +91,33 @@ function main() {
         month = 1; year++;
       }
     }
-    client.close();
+    that.client.close();
   });
-}
-
+};
 
 /**
- *
- * @param {*} month
- * @param {*} year
- * @param {*} areaName
- * @param {*} dirName
+ * @param {int} month
+ * @param {int} year
+ * @param {string} dirName
+ * @param {string} areaName
  */
-function one() {
-  // Settings
-  const month = 6;
-  const year = 2019;
-  const dirName = 'other';
-  const areaName = 'northlands';
+EmailMaker.prototype.oneEmail = function(month, year, dirName, areaName) {
+  const that = this;
+  const dir = this.help.makeDir(year, month, dirName);
 
-  const dir = help.makeDir(year, month, dirName);
-  client.connect(function(err) {
+  this.client.connect(function(err) {
     assert.equal(null, err);
-    const collection = client.db(help.DBNAME).collection(help.COLNAME);
-    makeRegionMonth(collection, areaName, month, year, dir, false);
+    const collection = that.client.db(that.help.DBNAME)
+        .collection(that.help.COLNAME);
+    that.makeRegionMonth(collection, areaName, month, year, dir, false);
     client.close();
   });
+};
+
+
+module.exports = EmailMaker;
+
+// If run from command line
+if (require.main === module) {
+  new EmailMaker().main();
 }
-
-
-module.exports.init = main();

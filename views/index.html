@@ -8,10 +8,10 @@
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script type="text/javascript" src="/static/charts/bar.js"></script>
+    <!-- <script type="text/javascript" src="/static/charts/bar.js"></script> -->
     <script>
-      google.charts.load("current", {"packages":["corechart"]});
-      google.charts.setOnLoadCallback(drawCharts);
+      // google.charts.load("current", {"packages":["corechart"]});
+      // google.charts.setOnLoadCallback(drawCharts);
     </script>
   </head>
 
@@ -20,12 +20,21 @@
     <h3>Peter {{test}}</h3>
     
     <select>
+      <option disabled selected hidden>Channel</option>
+      <option>Abuses</option>
+      <option>Parks</option>
+      <option>Can't Find Park</option>
+      <option>Feedback</option>
+    </select>
+
+    <select>
       <option disabled selected hidden>Region</option>
       <option>Northern</option>
       <option>Midlands</option>
       <option>Central</option>
       <option>Southern</option>
     </select>
+    
     <select>
       <option disabled selected hidden>Time Period</option>
       <option>Day</option>
@@ -34,12 +43,36 @@
       <option>Year</option>
       <option>All Time</option>
     </select>
+
+    <!-- TODO: Dynamically Populate-->
     <select>
-      <option disabled selected hidden>Channel</option>
-      <option>Abuses</option>
-      <option>Parks</option>
-      <option>Can't Find Park</option>
-      <option>Feedback</option>
+        <option disabled selected hidden>Year</option>
+        <option>2017</option>
+        <option>2018</option>
+        <option>2019</option>
+    </select>
+
+    <!-- TODO: Dynamically Populate-->
+    <select>
+        <option disabled selected hidden>Month</option>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+        <option>10</option>
+        <option>11</option>
+        <option>12</option>
+    </select>
+
+    <!-- TODO: Dynamically Populate-->
+    <select>
+        <option disabled selected hidden>Day</option>
+        <option>1</option>
     </select>
 
     <div>
