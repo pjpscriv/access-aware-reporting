@@ -34,11 +34,13 @@ app.get('/', function(req, res) {
 // Abuses API
 app.use('/abuse', abuse);
 
+/**
 // Echo Test
 app.get('/echo', function(req, res) {
   const stuff = {'headers': req.headers, 'url': req.url, 'body': req.body};
   res.end(JSON.stringify(stuff, null, 2));
 });
+/** */
 
 // 404
 app.get('*', function(req, res) {

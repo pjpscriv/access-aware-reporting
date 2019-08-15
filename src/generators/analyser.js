@@ -272,15 +272,19 @@ function getOwners(collection, date, region, callback) {
     const owners = {};
     let sortedList = [];
     for (const item of dat) {
-      const owner = item.form_fields[0].value;
-      if (owner !== null & owner !== '') {
-        // owner = owner.toLowerCase();
-        if (owners[owner] == null) {
-          owners[owner] = 1;
-        } else {
-          owners[owner]++;
+      // Bug fix for when item doesn't have form_fields
+      if (item.hasOwnProperty('form_fields')) {
+        const owner = item.form_fields[0].value;
+        if (owner !== null & owner !== '') {
+          // owner = owner.toLowerCase();
+          if (owners[owner] == null) {
+            owners[owner] = 1;
+          } else {
+            owners[owner]++;
+          }
         }
       }
+
       // Sort owners list by count
       sortedList = Object.keys(owners).sort((a, b) => {
         return owners[b] - owners[a];

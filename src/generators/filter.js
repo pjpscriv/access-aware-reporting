@@ -91,6 +91,7 @@ function saveCSV(file, data) {
               }
               break;
             case 24529:
+              // what is? f_4125_74_17_120_12
               const abuseTypes = {
                 'f_4125_74_17_76_10': 'No Permit',
                 'f_4125_74_17_78_11': 'Permit expired',
@@ -100,6 +101,7 @@ function saveCSV(file, data) {
               } else {
                 if (field.value) {
                   console.error('Error Abuse Type value:', field.value);
+                  console.error('In Report:', report.id);
                 }
                 abuseType = '';
               }
@@ -126,6 +128,7 @@ function saveCSV(file, data) {
                   console.error(
                       'Error translating Public/Private Field. value:',
                       field.value);
+                  console.error('In Report:', report.id);
                 }
                 publicPrivate = '';
               }
@@ -138,6 +141,8 @@ function saveCSV(file, data) {
               break;
             // Follow up, Office use, Section, Textbox, Textbox
             case 65244: case 65245: case 63982: case 24499: case 24491:
+            // SectionBreak
+            case 24504:
               // Catch all other known fields here
               break;
             // New fields: 'Action', Partner Action box

@@ -19,12 +19,12 @@ const client = new MongoClient(help.URL, {useNewUrlParser: true});
 const puller = new DataPuller(help.getKey());
 
 // true = pulls *whole* channel
-// false = pulls 100
-const PULLALL = false;
+// false = pulls 2000
+const PULLALL = true;
 
 // true: pulls page by page
 // false: pulls all pages at once
-const RECURSIVEPULL = true;
+const RECURSIVEPULL = false;
 
 // FUNCTIONS
 /**
@@ -69,7 +69,7 @@ function main() {
       if (RECURSIVEPULL) {
         puller.getReportsBlockR(help.ABUSE_CHANNEL, 0, 2000, loadToDatabase);
       } else {
-        puller.getReportsBlock(help.ABUSE_CHANNEL, 0, 100, loadToDatabase);
+        puller.getReportsBlock(help.ABUSE_CHANNEL, 0, 2000, loadToDatabase);
       }
     }
 

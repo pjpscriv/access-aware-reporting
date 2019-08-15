@@ -53,17 +53,18 @@ EmailMaker.prototype.makeRegionMonth =function(
  * Main function.
  */
 EmailMaker.prototype.main = function() {
-  const currYear = new Date().getFullYear();
-  const currMonth = new Date().getMonth() + 1;
-  const startYear = 2019;
-  const startMonth = 7;
+  // Point to generate emails from
+  const startMonth = 10; // 3
+  const startYear = 2017; // 2017
 
   const that = this;
 
   this.client.connect(function(err) {
     assert.equal(null, err);
-    let year = startYear; // 2017;
-    let month = startMonth; // 3;
+    let year = startYear;
+    let month = startMonth;
+    const currMonth = new Date().getMonth() + 1;
+    const currYear = new Date().getFullYear();
 
     const collection = that.client.db(that.help.DBNAME)
         .collection(that.help.COLNAME);

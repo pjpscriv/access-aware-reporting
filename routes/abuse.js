@@ -45,7 +45,7 @@ router.get('/:area/day/'+yParam+'-'+mParam+'-'+dParam, (req, res) => {
 });
 
 
-/**
+/** Get data from Database
  *
  * @param {*} area
  * @param {*} date
@@ -68,7 +68,7 @@ function getReports(area, date, res) {
   // client.close();
 };
 
-
+// 404
 router.get('*', (req, res) => {
   res.status(404).send('Abuses router. Could not find '+req.url);
 });

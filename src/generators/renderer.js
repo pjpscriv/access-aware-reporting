@@ -14,7 +14,7 @@ const mustache = require('mustache');
 
 // CONSTANTS
 // const help = new Helper();
-const TEMPLATE = '../views/mustache/template.html';
+const TEMPLATE = '../views/email.html';
 
 // MAIN
 /**

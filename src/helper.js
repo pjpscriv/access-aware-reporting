@@ -308,7 +308,8 @@ Helper.prototype.makeDir = function(year, month, parentDir) {
   const areaDir = path.join(this.OUTPUT_DIR, parentDir);
 
   const monthNum = (month<10 ? '0'+month : month);
-  const monthStr = monthNum + ' - ' + this.months[month-1];
+  const monthStr = String(monthNum);
+  // const monthStr = monthNum + ' - ' + this.months[month-1];
   const monthDir = path.join(areaDir, String(year), monthStr);
 
   // Make sub-directories
