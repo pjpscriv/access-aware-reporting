@@ -8,7 +8,8 @@
 // IMPORTS
 const express = require('express');
 const mustache = require('mustache-express');
-const abuse = require('./routes/abuse');
+const abuse = require('./routes/abuse-api');
+const ajax = require('./routes/ajax-api');
 
 // CONSTANTS
 const app = express();
@@ -33,6 +34,9 @@ app.get('/', function(req, res) {
 
 // Abuses API
 app.use('/abuse', abuse);
+
+// AJAX API
+app.use('/ajax', ajax);
 
 /**
 // Echo Test

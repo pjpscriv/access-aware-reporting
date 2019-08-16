@@ -2,6 +2,7 @@ html {
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -30,7 +31,7 @@ option {
 }
 
 select {
-    color: #aaa;
+    color: #222;
     background-color: white;
     border-width: 0px;
     border-bottom: 2px solid #666;
@@ -38,8 +39,12 @@ select {
     flex: 0 1 150px;
 }
 
-/* For tooltip flickering */
+/* For google charts tooltip flickering */
 svg > g > g:last-child { 
     pointer-events: none 
+}
+
+.results img {
+    width: 540px;
 }
 

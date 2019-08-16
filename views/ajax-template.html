@@ -1,0 +1,49 @@
+<div id='amount'>
+  <h3>Amount</h3>
+  <p>There were <b>{{valid_reports}}</b> abuse reports made by app users this month. {{#change}}{{incr_decr}} {{amount}} reports from last month.{{/change}}{{^change}}The same amount of reports as last month.{{/change}}</p>
+</div>
+
+<div id='locations'>
+  <h3>Locations</h3>
+  <p>Here is a map of their locations:</p>
+  <img src='{{map_url}}'/>
+
+  <p>The most commonly reported addresses were:</p>
+  <ul>
+  {{#common_address_list}}
+    <li>{{count}} reports at {{_id}}</li>
+  {{/common_address_list}}
+  </ul>
+</div>
+
+<div id='time'>
+  <h3>Time</h3>
+  <p>This graph shows reports made in {{month}} per day:</p>
+  <img src='{{day_graph_url}}'/>
+</div>
+
+<div id='ownership'>
+  <h3>Ownership</h3>
+  <p>{{public}} reports were in publicly owned parks, {{private}} were in privately owned parks, and in {{not_sure}} cases the reporters were not sure who owned the park.</p>
+
+  <p>Of the <i>privately</i> owned parks, the most common park owners were:</p>
+  <ul>
+  {{#common_owners_list}}
+    <li>{{name}} with {{count}} reports</li>
+  {{/common_owners_list}}
+  </ul>
+
+  {{#other_owners_count}}
+  <p>There were {{other_owners_count}} other private owners. {{#common_owners_list}}{{/common_owners_list}}</p>
+  {{/other_owners_count}}
+</div>
+
+<div id='responses'>
+  <h3>Responses</h3>
+  {{#all_notif}} 
+  <p>Parking services were notified about {{all_notif}} reports. {{^action}}But action wasn't taken for any of these notifications.{{/action}}{{#action}}An officer was dispatched for {{officer}} of these. Of these {{tick_issued}} tickets were issued, {{unforce}} were found to be unenforceable and {{veh_gone}} found the vehicle gone.{{/action}}</p>
+  {{/all_notif}}
+  {{^all_notif}}
+  <p>There were no notifications to parking services and thus no action was taken for any reports.</p>
+  {{/all_notif}}
+</div>
