@@ -1,4 +1,11 @@
-/**
+/** Abuse reports API. Returns JSON list of all reports
+ * that fall within the requested area and time period.
+ *
+ * Formats
+ * --------
+ * /abuses/<area>/year/<year>
+ * /abuses/<area>/month/<year>-<month>
+ * /abuses/<area>/day/<year>-<month>-<day>
  *
  * Date: 9 Aug 2019
  */
@@ -23,25 +30,40 @@ const dParam = ':day([0-9]{2})';
 
 // Year
 router.get('/:area/year/'+yParam, (req, res) => {
-  const area = help.getPolygon(req.params.area);
-  const date = help.yearRegEx(parseInt(req.params.year));
-  getReports(area, date, res);
+  try {
+    const area = help.getPolygon(req.params.area);
+    const date = help.yearRegEx(parseInt(req.params.year));
+    getReports(area, date, res);
+  } catch (error) {
+    res.status(404).send('Could not find '+req.url+'. No area \''
+        +req.params.area+'\'');
+  }
 });
 
 // Month
 router.get('/:area/month/'+yParam+'-'+mParam, (req, res) => {
-  const area = help.getPolygon(req.params.area);
-  const date = help.monthRegEx(parseInt(req.params.year),
-      parseInt(req.params.month));
-  getReports(area, date, res);
+  try {
+    const area = help.getPolygon(req.params.area);
+    const date = help.monthRegEx(parseInt(req.params.year),
+        parseInt(req.params.month));
+    getReports(area, date, res);
+  } catch (error) {
+    res.status(404).send('Could not find '+req.url+'. No area \''
+        +req.params.area+'\'');
+  }
 });
 
 // Day
 router.get('/:area/day/'+yParam+'-'+mParam+'-'+dParam, (req, res) => {
-  const area = help.getPolygon(req.params.area);
-  const date = help.dayRegEx(parseInt(req.params.year),
-      parseInt(req.params.month), parseInt(req.params.day));
-  getReports(area, date, res);
+  try {
+    const area = help.getPolygon(req.params.area);
+    const date = help.dayRegEx(parseInt(req.params.year),
+        parseInt(req.params.month), parseInt(req.params.day));
+    getReports(area, date, res);
+  } catch (error) {
+    res.status(404).send('Could not find '+req.url+'. No area \''
+        +req.params.area+'\'');
+  }
 });
 
 
