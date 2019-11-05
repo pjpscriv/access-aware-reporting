@@ -7,10 +7,8 @@
  */
 
 // IMPORTS
-// Global
 const assert = require('assert');
 const MongoClient = require('mongodb').MongoClient;
-// Local
 const filter = require('./generators/filter.js');
 const analyser = require('./generators/analyser.js');
 const mapper = require('./generators/mapper.js');
@@ -27,18 +25,20 @@ function EmailMaker() {
 
 
 /**
+ * Generate csv, json, map, graph & html for one region over one month.
  *
- * @param {*} collection
- * @param {*} regionName
- * @param {*} month
- * @param {*} year
- * @param {*} dir
- * @param {*} isRegion
+ * @param {*} collection MongoDB collection.
+ * @param {string} regionName Name of area e.g. 'northen'.
+ * @param {int} month Month. Range 1-12.
+ * @param {int} year Year e.g. 2018
+ * @param {path} dir Directory to which files are written.
+ * @param {boolean} isRegion If an area is an official CCS region.
  */
-EmailMaker.prototype.makeRegionMonth =function(
-    collection, regionName, month, year, dir, isRegion) {
+EmailMaker.prototype.makeRegionMonth = function(collection, regionName, month,
+    year, dir, isRegion) {
   const region = this.help.getPolygon(regionName);
   const date = this.help.monthRegEx(year, month);
+
   // Filter
   filter(collection, dir, date, regionName, region);
   // Analyser + Renderer
@@ -50,13 +50,20 @@ EmailMaker.prototype.makeRegionMonth =function(
 };
 
 /**
- * Main function.
+ * Main function. Generates emails for all CCS regions and parking provider
+ * areas from a given (startMonth, starYear) til the present month.
+ *
+ * Earliest (month,year) is (3, 2017)
+ *
+ * @param {int} startMonth 1-12
+ * @param {int} startYear Earliest year: 2017
  */
-EmailMaker.prototype.main = function() {
-  // Point to generate emails from
-  const startMonth = 10; // 3
-  const startYear = 2017; // 2017
-
+EmailMaker.prototype.main = function(startMonth, startYear) {
+  // Error Check
+  if (startYear < 2017 || startYear === 2017 && startMonth < 3) {
+    const dateStr = this.help.monthsLong[startMonth]+' '+String(startYear);
+    throw Error(dateStr+' too early. Earliest start date March 2017.');
+  }
   const that = this;
 
   this.client.connect(function(err) {
@@ -65,38 +72,34 @@ EmailMaker.prototype.main = function() {
     let month = startMonth;
     const currMonth = new Date().getMonth() + 1;
     const currYear = new Date().getFullYear();
-
-    const collection = that.client.db(that.help.DBNAME)
-        .collection(that.help.COLNAME);
+    const col = that.client.db(that.help.DBNAME).collection(that.help.COLNAME);
 
     // Iterate Months
     while ((year < currYear) || (year === currYear && month <= currMonth)) {
       // 1 - Iterate CCS Regions
-      let dir = that.help.makeDir(year, month, 'ccs');
-      console.log(' --- CCS REGIONS', month, year, '---');
+      const ccsDir = that.help.makeDir(year, month, 'ccs');
+      // console.log(' --- CCS REGIONS', month, year, '---');
       for (const regionName of Object.keys(that.help.regions)) {
-        that.makeRegionMonth(collection, regionName, month, year, dir, true);
+        that.makeRegionMonth(col, regionName, month, year, ccsDir, true);
       }
 
       // 2 - Iterate Parking Providers
-      dir = that.help.makeDir(year, month, 'providers');
-      console.log(' --- PARKING PROVIDER (AREAS)', month, year, '---');
+      const provDir = that.help.makeDir(year, month, 'providers');
+      // console.log(' --- PARKING PROVIDER (AREAS)', month, year, '---');
       for (const areaName of Object.keys(that.help.providers)) {
-        that.makeRegionMonth(collection, areaName, month, year, dir, false);
+        that.makeRegionMonth(col, areaName, month, year, provDir, false);
       }
 
       // Next Month
-      if (month < 12) {
-        month++;
-      } else {
-        month = 1; year++;
-      }
+      if (month < 12) month++; else month = 1; year++;
     }
     that.client.close();
   });
 };
 
 /**
+ * Test function. Creates email files for one area over one month.
+ *
  * @param {int} month
  * @param {int} year
  * @param {string} dirName
@@ -105,20 +108,23 @@ EmailMaker.prototype.main = function() {
 EmailMaker.prototype.oneEmail = function(month, year, dirName, areaName) {
   const that = this;
   const dir = this.help.makeDir(year, month, dirName);
-
   this.client.connect(function(err) {
     assert.equal(null, err);
-    const collection = that.client.db(that.help.DBNAME)
-        .collection(that.help.COLNAME);
-    that.makeRegionMonth(collection, areaName, month, year, dir, false);
-    client.close();
+    const col = that.client.db(that.help.DBNAME).collection(that.help.COLNAME);
+    that.makeRegionMonth(col, areaName, month, year, dir, true);
+    that.client.close();
   });
 };
 
 
 module.exports = EmailMaker;
 
+
 // If run from command line
 if (require.main === module) {
-  new EmailMaker().main();
+  const em = new EmailMaker();
+
+  // TODO: Create simple command line interface
+  em.main(9, 2019);
+  // new EmailMaker().oneEmail(8, 2019, 'ccs', 'central');
 }

@@ -21,7 +21,7 @@ function Helper() {
   // MongoDB Constants
   this.URL = 'mongodb://localhost:27017';
   this.DBNAME = 'accessaware';
-  this.COLNAME = 'aug06allabuses';
+  this.COLNAME = 'abuse2oct';
 
   // Output directory
   this.OUTPUT_DIR = path.join(process.cwd(), '..', 'generated');
@@ -34,6 +34,27 @@ function Helper() {
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   this.monthsLong = ['January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'];
+
+  // Full Area Names
+  this.names = {
+    northern: 'Northern Region',
+    midlands: 'Midlands Region',
+    central: 'Central Region',
+    southern: 'Southern Region',
+    care_park1: 'Wellington Hospital',
+    care_park2: 'Ewart Park',
+    ccc: 'Christchurch City Council',
+    wcc: 'Wellington City Council',
+    huttcc: 'Lower Hutt City Council',
+    tcc: 'Tauranga City Council',
+    hutt_dhb: 'Hutt Hospital',
+    pcc: 'Porirua City Council',
+    dcc: 'Dunedin City Council',
+    wdc: 'Waitaki District Council',
+    pncc: 'Palmerston North City Council',
+    npdc: 'New Plymouth District Council',
+    rcc: 'Rotorua',
+  };
 
   // CCS Regions
   this.regions = {
@@ -216,6 +237,15 @@ function Helper() {
       [-39.03491957140722, 174.1889190673828],
       [-38.983164684048404, 174.1786193847656],
       [-39.063448587207205, 173.99974822998047],
+    ],
+    rcc: [ // 12. Rotorua (City Council?)
+      [-38.18058470379002, 176.2443923950195],
+      [-38.13408399698048, 176.32232666015625],
+      [-38.11497569718241, 176.3022422790527],
+      [-38.13428653167246, 176.27117156982422],
+      [-38.09728086978861, 176.22962951660156],
+      [-38.13955223637848, 176.18602752685547],
+      [-38.18058470379002, 176.2443923950195],
     ]};
 
   // Other Areas
@@ -324,7 +354,8 @@ Helper.prototype.makeDir = function(year, month, parentDir) {
 
 // Area Stuff
 Helper.prototype.prettyAreaName = function(area) {
-  return area[0].toUpperCase() + area.slice(1);
+  // return area[0].toUpperCase() + area.slice(1);
+  return this.names[area];
 };
 
 Helper.prototype.getPolygon = function(areaName) {

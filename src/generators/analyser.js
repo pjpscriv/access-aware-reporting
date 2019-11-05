@@ -118,7 +118,15 @@ function getAddresses(collection, date, region, callback) {
 
   collection.aggregate(query).toArray((err, dat) => {
     assert.equal(err, null);
-    callback('common_address_list', dat);
+    const cleaned = [];
+    for (addr of dat) {
+      if (addr.count === 1) {
+        cleaned.push({address: addr._id, reports: '1 report'});
+      } else {
+        cleaned.push({address: addr._id, reports: addr.count+' reports'});
+      }
+    }
+    callback('common_address_list', cleaned);
   });
 }
 
@@ -268,45 +276,49 @@ function getOwners(collection, date, region, callback) {
   collection.find(query).project(projection).toArray((err, dat) => {
     assert.equal(err, null);
 
-    // Count park owners
-    const owners = {};
-    let sortedList = [];
-    for (const item of dat) {
-      // Bug fix for when item doesn't have form_fields
+    // Get list of owner names
+    let names = dat.map((item) => {
       if (item.hasOwnProperty('form_fields')) {
-        const owner = item.form_fields[0].value;
-        if (owner !== null & owner !== '') {
-          // owner = owner.toLowerCase();
-          if (owners[owner] == null) {
-            owners[owner] = 1;
-          } else {
-            owners[owner]++;
-          }
-        }
+        // Perhaps do some normalisation here
+        return item.form_fields[0].value;
       }
+    });
 
-      // Sort owners list by count
-      sortedList = Object.keys(owners).sort((a, b) => {
-        return owners[b] - owners[a];
-      });
+    names = names.filter((n) => (n !== null & n !== ''));
+
+    // console.log(names);
+
+    // Count up names
+    const ownerCount = {};
+    for (const o of names) {
+      if (ownerCount[o] == null) {
+        ownerCount[o] = 1;
+      } else {
+        ownerCount[o]++;
+      }
     }
 
+    // Sort owners list by count
+    const sortedList = Object.keys(ownerCount).sort((a, b) => {
+      return ownerCount[b] - ownerCount[a];
+    });
+
+    // Return the top 4 owners and their report counts
+    let cutoff = 4;
+    cutoff = (cutoff < sortedList.length ? cutoff : sortedList.length);
     const commonOwners = [];
-    const cutoff = 4;
-    for (const i in sortedList) {
-      if ({}.hasOwnProperty.call(sortedList, i)) {
-        // console.log('i',i, JSON.stringify(sortedList[i]))
-        commonOwners.push({name: sortedList[i], count: owners[sortedList[i]]});
-        if (i >= cutoff) {
-          break;
-        }
+    for (let i=0; i<cutoff; i++) {
+      const name = sortedList[i];
+      if (ownerCount[name] === 1) {
+        commonOwners.push({name: name, reports: '1 report'});
+      } else {
+        commonOwners.push({name: name, reports: ownerCount[name]+' reports'});
       }
     }
     callback('common_owners_list', commonOwners);
 
-    // console.log(out);
-    const count = Math.max(0, sortedList.length - cutoff);
-    callback('other_owners_count', count);
+    const remainder = Math.max(0, sortedList.length - cutoff);
+    callback('other_owners_count', remainder);
   });
 }
 
@@ -472,21 +484,22 @@ function analyse(collection, help, year, month, area, isRegion, callback) {
 
 
 /**
- * Main: Pull data from database. Filter by (month, region)
+ * Main analysis function. Pulls data from database, filters by (month, region),
+ * performs analysis on this data and writes results to file.
  *
- * @param {*} collection
- * @param {Helper} help
- * @param {*} dir
- * @param {number} month The month
- * @param {number} year
- * @param {string} area Name
- * @param {boolean} isRegion
+ * @param {*} collection MongoDB collection.
+ * @param {Helper} help Provides helper functions.
+ * @param {path} dir Directory to which files are written.
+ * @param {int} month Month. Range 1-12.
+ * @param {int} year Year e.g. 2018
+ * @param {string} area Name of area to pull data from.
+ * @param {boolean} isRegion If an area is an official CCS region.
  */
 function main(collection, help, dir, month, year, area, isRegion) {
   const file = path.join(dir, 'json', area+'.json');
   const render = renderer(dir, area, isRegion);
-  analyse(collection, help, year, month, area, isRegion,
-      saveAnalysisFile(file, render));
+  const callback = saveAnalysisFile(file, render);
+  analyse(collection, help, year, month, area, isRegion, callback);
 }
 
 

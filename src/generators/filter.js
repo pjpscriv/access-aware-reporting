@@ -14,29 +14,16 @@ const assert = require('assert');
 
 // FUNCTIONS
 /**
- * Callback function wrapper
+ * Convert JSON data to CSV and save to file.
  *
- * @param {object} dir
- * @param {object} region
- * @return {function} callback
- */
-function saveCSVCallback(dir, region) {
-  return function(err, data) {
-    assert.equal(err, null);
-    saveCSV(path.join(dir, 'csv', region+'.csv'), data); // Write file
-  };
-}
-
-/**
- * Save data to CSV file
- *
- * @param {file} file File object
- * @param {data} data Data to write to file
+ * @param {path} file Path to output file
+ * @param {json} data Data to write to file
  */
 function saveCSV(file, data) {
   let writeData = '';
 
   if (data.length > 0) {
+    // Headers
     writeData = 'report_id, ' +
                 'latitude, ' +
                 'longitude, ' +
@@ -165,8 +152,7 @@ function saveCSV(file, data) {
         writeData += numberPlate + ', ';
         writeData += publicPrivate + ', ';
         writeData += parkOwner + ', ';
-        writeData += additionalDetails + ', ';
-        writeData += '\n';
+        writeData += additionalDetails + ', \n';
       }
     }
   }
@@ -177,6 +163,21 @@ function saveCSV(file, data) {
     }
     console.log(file);
   });
+}
+
+/**
+ * Callback function wrapper
+ *
+ * @param {object} dir Folder in which the file is created
+ * @param {object} region Used to name the csv file
+ * @return {function} A callback that takes json data and writes it to the file
+ */
+function saveCSVCallback(dir, region) {
+  return function(err, data) {
+    assert.equal(err, null);
+    // Write to file
+    saveCSV(path.join(dir, 'csv', region+'.csv'), data);
+  };
 }
 
 /**
