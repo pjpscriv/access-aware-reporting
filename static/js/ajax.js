@@ -8,37 +8,28 @@ $('select').change(function() {
   const year = $('select.year').val();
   const month = $('select.month').val();
   if (region !== null && year !== null && month !== null) {
-    populate(year, month, region);
+    populate(region, year, month);
   }
 });
 
 
 /**
-  *
-  * @param {*} year
-  * @param {*} month
-  * @param {*} region
-  */
-function populate(year, month, region) {
-  const yearStr = String(year) + '/';
-  const monthStr = (month<10 ? '0'+month : month) + '/';
-  // const baseUrl = '/static/gen/ccs/' + yearStr + monthStr;
-  const url = '/ajax/'+yearStr+monthStr+region+'/';
-
-  updateHtml(url);
-};
-
-/**
+ * Takes a region, year, month. Requests new html from server. Inserts that
+ * html into page.
  *
- * @param {*} url
+ * @param {*} region
+ * @param {*} year
+ * @param {*} month
  */
-function updateHtml(url) {
+function populate(region, year, month) {
+  const yearStr = '/' + String(year);
+  const monthStr = '/' + (month<10 ? '0'+month : month);
+  const url = '/ajax/'+region+yearStr+monthStr+'/';
+  // Do Ajax
   $.ajax({
     url: url,
     success: function(html) {
       console.log('Got the data!');
-      // console.log(html);
-
       $('.results').empty().append(html);
     },
     error: function(data) {
@@ -46,7 +37,7 @@ function updateHtml(url) {
       console.log(data);
     },
   });
-}
+};
 
 
 $('get-csv').click(function() {
