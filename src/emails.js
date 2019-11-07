@@ -125,6 +125,6 @@ if (require.main === module) {
   const em = new EmailMaker();
 
   // TODO: Create simple command line interface
-  em.main(9, 2019);
+  em.main(10, 2019);
   // new EmailMaker().oneEmail(8, 2019, 'ccs', 'central');
 }
