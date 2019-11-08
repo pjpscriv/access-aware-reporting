@@ -15,7 +15,7 @@ const Helper = require('../helper.js');
 
 // CONSTANTS
 const help = new Helper();
-const client = new MongoClient(help.URL, {useNewUrlParser: true});
+const client = new MongoClient(help.URL, {useNewUrlParser: true,  useUnifiedTopology: true});
 const puller = new DataPuller(help.getKey());
 
 // true = pulls *whole* channel
