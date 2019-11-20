@@ -26,7 +26,7 @@ Make sure mongo database is running:
 $ mongod
 ```
 
-Ppull the latest reports with:
+Pull the latest reports with:
 ```bash
 $ node ./src/data-puller/loader.js
 ```
