@@ -1,5 +1,5 @@
 # Access Aware Reporting
-Program for visualising data from the [Access Aware](https://www.accessaware.co.nz/) app by CCS Disability Action and Safer.me (formerly ThunderMaps). Built with the assistance of the [API Examples](https://github.com/cloud-source/thundermaps-api-example).
+Program for visualising data from the [Access Aware](https://www.accessaware.co.nz/) app by CCS Disability Action and Safer.me (formerly ThunderMaps). Built with the assistance of the [API Examples](https://github.com/cloud-source/thundermaps-api-example) and [API Docs](https://github.com/formigarafa/thundermaps-api-docs).
 
 ## API Key
 Find your key in [Channel Manager](https://www.accessaware.co.nz/#!/channel-manager) > Integrations > Thunder Bot and save it into `api-key.txt`.
