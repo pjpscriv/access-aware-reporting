@@ -77,7 +77,7 @@ DataPuller.prototype.pullReportData = function(reportId, callback) {
 
   this.api.getReport(reportId, (err, res) => {
     if (err) {
-      console.log('Error!', err);
+      console.error('Error!', err);
       this.pullReportData(reportId, callback);
       console.log('Retried:', reportId);
       return;
@@ -114,7 +114,7 @@ DataPuller.prototype.getPage = function(channelId, index, index2, callback) {
 
   this.api.getReports(channelId, index, index2, (err, res) => {
     if (err) {
-      console.log('Error!', err);
+      console.error('Error!', err);
       this.getPage(channelId, index, index2, callback);
       console.log('Retried:', channelId, index, index2);
       return;
@@ -181,7 +181,7 @@ DataPuller.prototype.pullReportDataR = function(reportId, callback) {
 
   this.api.getReport(reportId, (err, res) => {
     if (err) {
-      console.log('Error!', err);
+      console.error('Error!', err);
       this.pullReportData(reportId, callback);
       console.log('Retried:', reportId);
       return;
@@ -229,7 +229,7 @@ DataPuller.prototype.getPageR = function(
 
   this.api.getReports(channelId, index, index2, (err, res) => {
     if (err) {
-      console.log('Error!', err);
+      console.error('Error!', err);
       this.getPageR(channelId, index, index2, end, callback);
       console.log('Retried:', channelId, index, index2);
       return;

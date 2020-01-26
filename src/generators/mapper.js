@@ -67,7 +67,7 @@ function getValidReports(col, date, outFile, region, icon, callback) {
 
   col.find(query, projection).toArray((err, data) => {
     if (err) {
-      console.log('Mongo err:', err);
+      console.error('Mongo err:', err);
     } else {
       callback(data, region, outFile, icon);
     }
@@ -120,7 +120,7 @@ function drawPointMap(points, region, file, icon) {
         console.log(file);
       })
       .catch(function(err) {
-        console.log(err);
+        console.error('Error writing', file, ':', err);
       });
 }
 

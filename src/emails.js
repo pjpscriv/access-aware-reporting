@@ -108,6 +108,7 @@ EmailMaker.prototype.main = function(startMonth, startYear) {
 EmailMaker.prototype.oneEmail = function(month, year, dirName, areaName) {
   const that = this;
   const dir = this.help.makeDir(year, month, dirName);
+
   this.client.connect(function(err) {
     assert.equal(null, err);
     const col = that.client.db(that.help.DBNAME).collection(that.help.COLNAME);
@@ -121,10 +122,10 @@ module.exports = EmailMaker;
 
 
 // If run from command line
+// TODO: Create simple command line interface
 if (require.main === module) {
   const em = new EmailMaker();
 
-  // TODO: Create simple command line interface
-  em.main(10, 2019);
-  // new EmailMaker().oneEmail(8, 2019, 'ccs', 'central');
+  em.main(12, 2019);
+  // em.oneEmail(12, 2019, 'ccs', 'central');
 }

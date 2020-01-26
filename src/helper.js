@@ -24,10 +24,10 @@ function Helper() {
   this.COLNAME = 'abuse6nov';
 
   // Output directory
-  this.OUTPUT_DIR = path.join(process.cwd(), '..', 'generated');
+  this.OUTPUT_DIR = path.join(process.cwd(), '.', 'generated');
 
   // Map Marker File
-  this.ICON_FILE = '../static/img/dot.png';
+  this.ICON_FILE = './static/img/dot.png';
 
   // Months
   this.months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -347,6 +347,7 @@ Helper.prototype.makeDir = function(year, month, parentDir) {
   const subDirs = ['csv', 'json', 'map', 'graph', 'html'];
   for (const dir of subDirs) {
     const subDir = path.join(monthDir, dir);
+    // console.log('Make dir:', subDir);
     this.mkDirPath(subDir);
   }
 

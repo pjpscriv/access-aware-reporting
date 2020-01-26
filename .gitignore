@@ -9,6 +9,7 @@ process.json
 generated/
 
 # Local DB Files
+data/
 mongo/
 mongodb.conf
 

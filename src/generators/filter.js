@@ -132,8 +132,8 @@ function saveCSV(file, data) {
             case 24504:
               // Catch all other known fields here
               break;
-            // New fields: 'Action', Partner Action box
-            case 77635: case 77636:
+            // New fields: 'Action', Partner Action box, another thing
+            case 77635: case 77636: case 107950:
               break;
             default:
               // Log weird fields
